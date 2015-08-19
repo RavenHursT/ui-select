@@ -21,7 +21,7 @@ uis.directive('uiSelect',
       if (angular.isDefined(tAttrs.multiple))
         tElement.append("<ui-select-multiple/>").removeAttr('multiple');
       else
-        tElement.append("<ui-select-single/>");       
+        tElement.append("<ui-select-single/>");
 
       return function(scope, element, attrs, ctrls, transcludeFn) {
 
@@ -43,7 +43,7 @@ uis.directive('uiSelect',
 
         $select.onSelectCallback = $parse(attrs.onSelect);
         $select.onRemoveCallback = $parse(attrs.onRemove);
-        
+
         //Limit the number of selections allowed
         $select.limit = (angular.isDefined(attrs.limit)) ? parseInt(attrs.limit, 10) : undefined;
 
@@ -293,6 +293,19 @@ uis.directive('uiSelect',
               element.removeClass(directionUpClassName);
           }
         });
+
+        attrs.$observe('uiSelectOnOpen', function() {
+          if (attrs.uiSelectOnOpen !== undefined) {
+            $select.onOpenCallback = $parse(attrs.uiSelectOnOpen);
+          }
+        });
+
+        attrs.$observe('uiSelectOnClose', function() {
+          if (attrs.uiSelectOnClose !== undefined) {
+            $select.onCloseCallback = $parse(attrs.uiSelectOnClose);
+          }
+        });
+
       };
     }
   };

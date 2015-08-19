@@ -43,7 +43,7 @@ uis.controller('uiSelectCtrl',
   if (ctrl.searchInput.length !== 1) {
     throw uiSelectMinErr('searchInput', "Expected 1 input.ui-select-search but got '{0}'.", ctrl.searchInput.length);
   }
-  
+
   ctrl.isEmpty = function() {
     return angular.isUndefined(ctrl.selected) || ctrl.selected === null || ctrl.selected === '';
   };
@@ -513,6 +513,20 @@ uis.controller('uiSelectCtrl',
         container[0].scrollTop -= highlighted.clientHeight - posY;
     }
   }
+
+  $scope.$watch(function(){
+    return ctrl.open;
+  }, function(openState){
+    if(openState && ctrl.onOpenCallback){
+      ctrl.onOpenCallback($scope, {
+        $model: ctrl.parserResult.modelMapper($scope, {})
+      });
+    } else if (!openState && ctrl.onCloseCallback){
+      ctrl.onCloseCallback($scope, {
+        $model: ctrl.parserResult.modelMapper($scope, {})
+      });
+    }
+  });
 
   $scope.$on('$destroy', function() {
     ctrl.searchInput.off('keyup keydown tagged blur paste');
